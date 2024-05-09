@@ -1,7 +1,8 @@
+//Noa Kopolovich 212541940 noabrako6@gmail.com
+//Esti Rosen 327130464 estirphoto@gmail.com
+
 import static java.lang.System.out;
-
 import static primitives.Util.isZero;
-
 import primitives.*;
 
 /**
