@@ -11,11 +11,11 @@ import static primitives.Util.isZero;
  */
 public class Double3 {
    /** First number */
-   final double                d1;
+   final double d1;
    /** Second number */
-   final double                d2;
+   final double d2;
    /** Third number */
-   final double                d3;
+   final double d3;
 
    /** Zero triad (0,0,0) */
    public static final Double3 ZERO = new Double3(0, 0, 0);
