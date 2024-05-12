@@ -6,6 +6,8 @@ package primitives;
  */
 public class Vector extends Point {
 
+
+
     /**
      * Constructs a new Vector instance with the specified x, y, and z coordinates.
      *
