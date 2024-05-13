@@ -19,8 +19,11 @@ public class Plane implements Geometry {
      * @param p3 The third point lying on the plane.
      */
     public Plane(Point p1, Point p2, Point p3) {
+        //calculating normal to plane
+        Vector v1 = p2.subtract(p1);
+        Vector v2 = p3.subtract(p1);
+        normal = v1.crossProduct(v2).normalize();
         q = p1; // Choosing one of the points as a reference point for the plane
-        normal = null; // To be computed
     }
 
     /**
