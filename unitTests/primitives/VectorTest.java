@@ -131,6 +131,10 @@ class VectorTest {
         assertThrows(IllegalArgumentException.class,
                 ()-> v1.crossProduct(v2),
                 "ERROR: crossProduct() for parallel vectors does not throw an exception");
+        // TC12: Test cross product of opposite vectors (expecting IllegalArgumentException)
+        assertThrows(IllegalArgumentException.class,
+                    ()-> v1.crossProduct(v1Opposite),
+                    "ERROR: crossProduct() for opposite vectors does not throw an exception");
     }
 
     /**

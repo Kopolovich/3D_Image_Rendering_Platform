@@ -30,8 +30,12 @@ public class Tube extends RadialGeometry {
     @Override
     public Vector getNormal(Point point) {
         double t = (point.subtract(axis.getHead())).dotProduct(axis.getDirection());
+        // If the point is exactly at the head of the ray (t == 0),
+        // the normal is simply the normalized vector from the head to the point
+        if (t == 0) {
+            return point.subtract(axis.getHead()).normalize();
+        }
         Point o = axis.getHead().add(axis.getDirection().scale(t));
-
         return point.subtract(o).normalize();
     }
 }

@@ -24,6 +24,23 @@ public class Cylinder extends Tube {
 
     @Override
     public Vector getNormal(Point point) {
-        return null; // To be implemented
+
+        // Calculate the projection of the point on the cylinder's axis
+        double t = point.subtract(axis.getHead()).dotProduct(axis.getDirection());
+
+        // Check if the point is on the bottom base
+        if (t <= 0) {
+            return axis.getDirection().scale(-1).normalize(); // Normal is opposite to the direction vector
+        }
+
+        // Check if the point is on the top base
+        if (t >= height) {
+            return axis.getDirection().normalize(); // Normal is the direction vector
+        }
+
+        // The point is on the curved surface of the cylinder
+        Point o = axis.getHead().add(axis.getDirection().scale(t));
+        return point.subtract(o).normalize();
     }
 }
+
