@@ -70,17 +70,25 @@ public class PolygonTests {
       // ============ Equivalence Partitions Tests ==============
       // TC01: There is a simple single test here - using a quad
       Point[] pts =
-         { new Point(0, 0, 1), new Point(1, 0, 0), new Point(0, 1, 0), new Point(-1, 1, 1) };
+         { new Point(0, 0, 1),
+           new Point(1, 0, 0),
+           new Point(0, 1, 0),
+           new Point(-1, 1, 1) };
       Polygon pol = new Polygon(pts);
       // ensure there are no exceptions
       assertDoesNotThrow(() -> pol.getNormal(new Point(0, 0, 1)), "");
       // generate the test result
       Vector result = pol.getNormal(new Point(0, 0, 1));
       // ensure |result| = 1
-      assertEquals(1, result.length(), DELTA, "Polygon's normal is not a unit vector");
+      assertEquals(1,
+                 result.length(),
+                 DELTA,
+                 "Polygon's normal is not a unit vector");
       // ensure the result is orthogonal to all the edges
       for (int i = 0; i < 3; ++i)
-         assertEquals(0d, result.dotProduct(pts[i].subtract(pts[i == 0 ? 3 : i - 1])), DELTA,
+         assertEquals(0d,
+                       result.dotProduct(pts[i].subtract(pts[i == 0 ? 3 : i - 1])),
+                       DELTA,
                       "Polygon's normal is not orthogonal to one of the edges");
    }
 
