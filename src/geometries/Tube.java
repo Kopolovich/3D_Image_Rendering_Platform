@@ -4,6 +4,8 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
+import java.util.List;
+
 /**
  * Represents a tube in three-dimensional space.
  * A tube is a cylindrical surface with a circular cross-section.
@@ -37,6 +39,11 @@ public class Tube extends RadialGeometry {
         }
         Point o = axis.getHead().add(axis.getDirection().scale(t));
         return point.subtract(o).normalize();
+    }
+
+    @Override
+    public List<Point> findIntersections(Ray ray) {
+        return null;
     }
 }
 

@@ -29,4 +29,8 @@ class PlaneTest {
                     ()-> new Plane(new Vector(1,1,1), new Vector(1,1,1), new Vector(2,2,2)),
                     "ERROR: calculating normal for plane using 2 coincided points does not throw an exception");
     }
+
+    @Test
+    void testFindIntersections() {
+    }
 }

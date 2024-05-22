@@ -20,4 +20,8 @@ class SphereTest {
                 sphere.getNormal(new Point(5,0,0)),
                 "ERROR: sphere getNormal() does not work correctly");
     }
+
+    @Test
+    void testFindIntersections() {
+    }
 }

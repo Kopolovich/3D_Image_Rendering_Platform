@@ -27,4 +27,8 @@ class TubeTest {
                 tube.getNormal(new Point(0, 2, 0)),
                 "ERROR: tube getNormal() does not work correctly at the boundary point");
     }
+
+    @Test
+    void testFindIntersections() {
+    }
 }
