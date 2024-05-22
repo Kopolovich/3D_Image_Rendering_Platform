@@ -13,7 +13,8 @@ class VectorTest {
     Vector v2 = new Vector(-2, -4, -6);
     Vector v3 = new Vector(0, 3, -2);
     Vector v4 = new Vector(1, 2, 2);
-
+    Vector v5 = new Vector(3,4,0);
+    double DELTA = 0.0001;
     /**
      * Test method for ctors.
      */
@@ -24,10 +25,11 @@ class VectorTest {
         assertThrows(IllegalArgumentException.class,
                     ()->new Vector(0, 0, 0),
                     "ERROR: zero vector does not throw an exception") ;
-        // TC12: Test constructor with zero vector (using Double3 constant) (expecting IllegalArgumentException)
+        // TC12: Test constructor with zero vector (using Double3 constant)
+        // (expecting IllegalArgumentException)
         assertThrows(IllegalArgumentException.class,
-                ()->new Vector(Double3.ZERO),
-                "ERROR: zero vector does not throw an exception") ;
+                    ()->new Vector(Double3.ZERO),
+                    "ERROR: zero vector does not throw an exception") ;
     }
 
     /**
@@ -37,7 +39,9 @@ class VectorTest {
     void testAdd() {
         // ============ Equivalence Partitions Tests ==============
         // TC01: Test addition of two vectors
-        assertEquals(v1Opposite, v1.add(v2), "ERROR: Vector + Vector does not work correctly");
+        assertEquals(v1Opposite,
+                    v1.add(v2),
+                    "ERROR: Vector + Vector does not work correctly");
 
         // =============== Boundary Values Tests ==================
         // TC11: Test addition of a vector to its opposite (expecting IllegalArgumentException)
@@ -53,7 +57,9 @@ class VectorTest {
     void testSubtract(){
         // ============ Equivalence Partitions Tests ==============
         // TC01: Test subtraction of two vectors
-        assertEquals(new Vector(3,6,9), v1.subtract(v2), "ERROR: Vector + Vector does not work correctly");
+        assertEquals(new Vector(3,6,9),
+                    v1.subtract(v2),
+                    "ERROR: Vector + Vector does not work correctly");
 
         // =============== Boundary Values Tests ==================
         // TC11: Test subtraction of a vector from itself (expecting IllegalArgumentException)
@@ -70,7 +76,9 @@ class VectorTest {
     void testScale() {
         // ============ Equivalence Partitions Tests ==============
         // TC01: Test scaling of a vector by a scalar
-        assertEquals(new Vector(p1.xyz), v1.scale(2), "ERROR: Scaling this vector does not work correctly");
+        assertEquals(new Vector(p1.xyz),
+                    v1.scale(2),
+                    "ERROR: Scaling this vector does not work correctly");
 
         // =============== Boundary Values Tests ==================
         // TC11: Test scaling of a vector by zero (expecting IllegalArgumentException)
@@ -86,7 +94,9 @@ class VectorTest {
     void testLengthSquared() {
         // ============ Equivalence Partitions Tests ==============
         // TC01: Test squared length of a vector
-        assertTrue(isZero(v4.lengthSquared() - 9),
+        assertEquals(9,
+                    v4.lengthSquared(),
+                    DELTA,
                    "ERROR: lengthSquared() wrong value");
     }
 
@@ -97,7 +107,10 @@ class VectorTest {
     void testLength() {
         // ============ Equivalence Partitions Tests ==============
         // TC01: Test length of a vector
-        assertTrue(isZero(v4.length() - 3), "ERROR: length() wrong value");
+        assertEquals(5,
+                    v5.length(),
+                    DELTA,
+                    "ERROR: length() wrong value");
     }
 
     /**
@@ -107,11 +120,17 @@ class VectorTest {
     void testDotProduct() {
         // ============ Equivalence Partitions Tests ==============
         // TC02: Test dot product of two vectors
-        assertTrue(isZero(v1.dotProduct(v2) + 28), "ERROR: dotProduct() wrong value");
+        assertEquals(-28,
+                    v1.dotProduct(v2),
+                    DELTA,
+                    "ERROR: dotProduct() wrong value");
 
         // =============== Boundary Values Tests ==================
         // TC01: Test dot product of orthogonal vectors (expecting zero)
-        assertTrue(isZero(v1.dotProduct(v3)), "ERROR: dotProduct() for orthogonal vectors is not zero");
+        assertEquals(0,
+                    v1.dotProduct(v3),
+                    DELTA,
+                    "ERROR: dotProduct() for orthogonal vectors is not zero");
     }
 
     /**
@@ -122,15 +141,24 @@ class VectorTest {
         // ============ Equivalence Partitions Tests ==============
         // TC01: Test cross product of two vectors
         Vector vr = v1.crossProduct(v3);
-        assertTrue(isZero(vr.length() - v1.length() * v3.length()),
+        assertEquals(vr.length(),
+                    v1.length() * v3.length(),
+                    DELTA,
                    "ERROR: crossProduct() wrong result length");
-        assertTrue(isZero(vr.dotProduct(v1)) && isZero(vr.dotProduct(v3)), "ERROR: crossProduct() result is not orthogonal to its operands");
+        assertEquals(0,
+                    vr.dotProduct(v1),
+                    DELTA,
+                    "ERROR: crossProduct() result is not orthogonal to its operands");
+        assertEquals(0,
+                    vr.dotProduct(v3),
+                    DELTA,
+                    "ERROR: crossProduct() result is not orthogonal to its operands");
 
         // =============== Boundary Values Tests ==================
         // TC11: Test cross product of parallel vectors (expecting IllegalArgumentException)
         assertThrows(IllegalArgumentException.class,
-                ()-> v1.crossProduct(v2),
-                "ERROR: crossProduct() for parallel vectors does not throw an exception");
+                    ()-> v1.crossProduct(v2),
+                    "ERROR: crossProduct() for parallel vectors does not throw an exception");
         // TC12: Test cross product of opposite vectors (expecting IllegalArgumentException)
         assertThrows(IllegalArgumentException.class,
                     ()-> v1.crossProduct(v1Opposite),
@@ -145,10 +173,13 @@ class VectorTest {
         // ============ Equivalence Partitions Tests ==============
         // TC01: Test normalization of a vector
         Vector u = v1.normalize();
-        assertTrue(isZero(u.length() - 1), "ERROR: the normalized vector is not a unit vector");
+        assertEquals(1,
+                    u.length(),
+                    "ERROR: the normalized vector is not a unit vector");
         assertThrows(IllegalArgumentException.class,
                     ()-> v1.crossProduct(u),
                     "ERROR: the normalized vector is not parallel to the original one");
-        assertFalse(v1.dotProduct(u) < 0, "ERROR: the normalized vector is opposite to the original one");
+        assertFalse(v1.dotProduct(u) < 0,
+                    "ERROR: the normalized vector is opposite to the original one");
     }
 }

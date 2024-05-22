@@ -6,8 +6,6 @@ package primitives;
  */
 public class Vector extends Point {
 
-
-
     /**
      * Constructs a new Vector instance with the specified x, y, and z coordinates.
      *
@@ -121,6 +119,6 @@ public class Vector extends Point {
      */
     public Vector normalize() {
         double length = this.length();
-        return new Vector(this.xyz.d1 / length, this.xyz.d2 / length, this.xyz.d3 / length);
+        return new Vector(this.xyz.reduce(length));
     }
 }
