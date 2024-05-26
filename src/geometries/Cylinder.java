@@ -3,6 +3,8 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
+import java.util.List;
+
 /**
  * Represents a cylinder in three-dimensional space.
  * Extends the Tube class and adds a height dimension.
@@ -41,6 +43,11 @@ public class Cylinder extends Tube {
         // The point is on the curved surface of the cylinder
         Point o = axis.getHead().add(axis.getDirection().scale(t));
         return point.subtract(o).normalize();
+    }
+
+    @Override
+    public List<Point> findIntersections(Ray ray) {
+        return null;
     }
 }
 

@@ -50,8 +50,8 @@ class PointTest {
 
         // =============== Boundary Values Tests ==================
         // TC11: Test addition of a vector to opposite point resulting in the center of coordinates
-        assertEquals(Double3.ZERO,
-                    p1.add(v1Opposite).xyz,
+        assertEquals(Point.ZERO,
+                    p1.add(v1Opposite),
                     "ERROR: (point + vector) = center of coordinates does not work correctly");
     }
 
