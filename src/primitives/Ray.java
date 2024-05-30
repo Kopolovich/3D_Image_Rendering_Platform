@@ -5,6 +5,8 @@ package primitives;
 
 import java.util.Objects;
 
+import static primitives.Util.isZero;
+
 public class Ray {
     /**
      * The starting point of the ray.
@@ -33,6 +35,13 @@ public class Ray {
 
     public Vector getDirection() {
         return direction;
+    }
+
+    public Point getPoint(double t){
+        if(isZero(t))
+            return head;
+        return head.add(direction.scale(t));
+
     }
 
     @Override

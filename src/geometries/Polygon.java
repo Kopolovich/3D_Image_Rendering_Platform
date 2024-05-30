@@ -2,6 +2,7 @@ package geometries;
 
 import java.util.List;
 
+import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
 import primitives.Point;
@@ -19,7 +20,7 @@ public class Polygon implements Geometry {
    /** Associated plane in which the polygon lays */
    protected final Plane plane;
    /** The size of the polygon - the amount of the vertices in the polygon */
-   private final int size;
+   protected final int size;
 
    /**
     * Polygon constructor based on vertices list. The list must be ordered by edge
@@ -80,11 +81,104 @@ public class Polygon implements Geometry {
       }
    }
 
+   /**
+    * Returns the normal vector to the polygon by given point
+    *
+    * @param point a point on the geometry's surface.
+    * @return The normal vector to the polygon by given point
+    */
    @Override
    public Vector getNormal(Point point) { return plane.getNormal(); }
 
+   /**
+    * Returns a list of intersection points between the given ray and the polygon.
+    * If the ray does not intersect the polygon, or if the intersection point is on an edge or vertex,
+    * the method returns null.
+    *
+    * @param ray The ray to find intersections with the polygon
+    * @return A list containing the intersection point if the ray intersects the interior of the polygon,
+    *         or null otherwise
+    */
    @Override
    public List<Point> findIntersections(Ray ray) {
-      return null;
+      Point p0 = ray.getHead();  // The origin point of the ray
+      Vector v = ray.getDirection();  // The direction vector of the ray
+
+      // Find the intersection with the plane
+      List<Point> planeIntersections = plane.findIntersections(ray);
+      if (planeIntersections == null) {
+         return null;
+      }
+
+      // There should be exactly one intersection point with the plane
+      Point intersectionPoint = planeIntersections.getFirst();
+
+      // Check if the intersection point is on one of the polygon's edges or vertices
+      Point p1, p2;
+      Vector edge, vp1, vp2;
+      Vector normalToEdge;
+      for (int i = 0; i < size; i++) {
+         p1 = vertices.get(i);
+         p2 = vertices.get((i + 1) % size);
+         edge = p2.subtract(p1);
+
+         // If the intersection point is equal to a vertex, return null
+         if (p1.equals(intersectionPoint) || p2.equals(intersectionPoint)) {
+            return null;
+         }
+
+         vp1 = intersectionPoint.subtract(p1);
+         vp2 = p2.subtract(intersectionPoint);
+         normalToEdge = edge.crossProduct(plane.getNormal());
+
+         // If the intersection point lies on the edge, return null
+         if (isZero(vp1.dotProduct(normalToEdge)) && alignZero(edge.dotProduct(vp1)) >= 0 && alignZero(edge.dotProduct(vp2)) >= 0) {
+            return null;
+         }
+      }
+
+      // Check if the intersection point is inside the polygon
+      boolean sameSign = true;
+      double product1 = 0, product2 = 0;
+
+      for (int i = 0; i < size; i++) {
+         p1 = vertices.get(i);
+         p2 = vertices.get((i + 1) % size);
+         edge = p2.subtract(p1);
+
+         vp1 = intersectionPoint.subtract(p1);
+         vp2 = intersectionPoint.subtract(p2);
+         normalToEdge = edge.crossProduct(plane.getNormal());
+
+         // Align the normal to the edge
+         normalToEdge = normalToEdge.normalize();
+
+         product1 = alignZero(vp1.dotProduct(normalToEdge));
+         product2 = alignZero(vp2.dotProduct(normalToEdge));
+
+         if (product1 * product2 < 0) {
+            sameSign = false;
+            break;
+         }
+      }
+
+      if (!sameSign) {
+         return null;
+      }
+
+      // Additional check: ensure the intersection point is within the polygon's bounds
+      double edgeProduct;
+      for (int i = 0; i < size; i++) {
+         p1 = vertices.get(i);
+         p2 = vertices.get((i + 1) % size);
+         edge = p2.subtract(p1);
+         vp1 = intersectionPoint.subtract(p1);
+         edgeProduct = alignZero(edge.dotProduct(vp1));
+
+         if (edgeProduct < 0) {
+            return null;
+         }
+      }
+      return List.of(intersectionPoint);
    }
 }

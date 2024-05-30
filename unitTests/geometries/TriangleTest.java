@@ -60,24 +60,29 @@ class TriangleTest {
 
         // TC02: Ray's line is outside the triangle against edge (0 points)
         Ray ray2 = new Ray(new Point(-1, 0.5, 1), new Vector(1, 0, -1));
-        assertNull(triangle.findIntersections(ray2), "Ray's line should be outside the triangle against edge");
+        assertNull(triangle.findIntersections(ray2),
+                    "Ray's line should be outside the triangle against edge");
 
         // TC03: Ray's line is outside the triangle against vertex (0 points)
         Ray ray3 = new Ray(new Point(-1, -1, 1), new Vector(1, 1, -1));
-        assertNull(triangle.findIntersections(ray3), "Ray's line should be outside the triangle against vertex");
+        assertNull(triangle.findIntersections(ray3),
+                    "Ray's line should be outside the triangle against vertex");
 
         // =============== Boundary Values Tests ==================
 
         // TC11: Ray's line is on the edge of the triangle (0 points)
         Ray ray4 = new Ray(new Point(0.5, 0, 1), new Vector(0, 0, -1));
-        assertNull(triangle.findIntersections(ray4), "Ray's line should be on the edge of the triangle");
+        assertNull(triangle.findIntersections(ray4),
+                    "Ray's line should be on the edge of the triangle");
 
         // TC12: Ray's line is in the vertex of the triangle (0 points)
         Ray ray5 = new Ray(new Point(0, 0, 1), new Vector(0, 0, -1));
-        assertNull(triangle.findIntersections(ray5), "Ray's line should be in the vertex of the triangle");
+        assertNull(triangle.findIntersections(ray5),
+                    "Ray's line should be in the vertex of the triangle");
 
         // TC13: Ray's line is on the continuation of the edge of the triangle (0 points)
         Ray ray6 = new Ray(new Point(2, 0, 1), new Vector(0, 0, -1));
-        assertNull(triangle.findIntersections(ray6), "Ray's line should be on the continuation of the edge of the triangle");
+        assertNull(triangle.findIntersections(ray6),
+                    "Ray's line should be on the continuation of the edge of the triangle");
     }
 }

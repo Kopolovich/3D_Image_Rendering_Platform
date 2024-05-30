@@ -109,7 +109,7 @@ public class PolygonTests {
 
       // ============ Equivalence Partitions Tests ==============
 
-      // TC01: Ray's line is inside the polygon (1 point)
+      //TC01: Ray's line is inside the polygon (1 point)
       Point intersection1 = new Point(2, 2, 1);
       Ray ray1 = new Ray(new Point(2, 2, 2), new Vector(0, 0, -1));
       var result1 = polygon.findIntersections(ray1);
@@ -119,24 +119,29 @@ public class PolygonTests {
 
       // TC02: Ray's line is outside the polygon against edge (0 points)
       Ray ray2 = new Ray(new Point(4, 2, 2), new Vector(0, 0, -1));
-      assertNull(polygon.findIntersections(ray2), "Ray's line should be outside the polygon against edge");
+      assertNull(polygon.findIntersections(ray2),
+               "Ray's line should be outside the polygon against edge");
 
       // TC03: Ray's line is outside the polygon against vertex (0 points)
       Ray ray3 = new Ray(new Point(4, 4, 2), new Vector(0, 0, -1));
-      assertNull(polygon.findIntersections(ray3), "Ray's line should be outside the polygon against vertex");
+      assertNull(polygon.findIntersections(ray3),
+               "Ray's line should be outside the polygon against vertex");
 
       // =============== Boundary Values Tests ==================
 
       // TC11: Ray's line is on the edge of the polygon (0 points)
       Ray ray4 = new Ray(new Point(2, 1, 2), new Vector(0, 0, -1));
-      assertNull(polygon.findIntersections(ray4), "Ray's line should be on the edge of the polygon");
+      assertNull(polygon.findIntersections(ray4),
+               "Ray's line should be on the edge of the polygon");
 
       // TC12: Ray's line is in the vertex of the polygon (0 points)
       Ray ray5 = new Ray(new Point(3, 1, 2), new Vector(0, 0, -1));
-      assertNull(polygon.findIntersections(ray5), "Ray's line should be in the vertex of the polygon");
+      assertNull(polygon.findIntersections(ray5),
+               "Ray's line should be in the vertex of the polygon");
 
       // TC13: Ray's line is on the continuation of the edge of the polygon (0 points)
       Ray ray6 = new Ray(new Point(4, 1, 2), new Vector(0, 0, -1));
-      assertNull(polygon.findIntersections(ray6), "Ray's line should be on the continuation of the edge of the polygon");
+      assertNull(polygon.findIntersections(ray6),
+               "Ray's line should be on the continuation of the edge of the polygon");
    }
 }
