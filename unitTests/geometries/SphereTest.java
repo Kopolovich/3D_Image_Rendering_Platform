@@ -33,19 +33,6 @@ class SphereTest {
                     "Sphere's normal is not a unit vector");
     }
 
-    /**
-     * Help method that compares two points to check if they are equal within a specified tolerance.
-     *
-     * @param p1 the first point to compare
-     * @param p2 the second point to compare
-     * @return true if the points are equal within the tolerance, false otherwise
-     */
-    private boolean compareWithTolerance(Point p1, Point p2){
-        final double TOLERANCE = 1e-6;
-        return (p1.getX() - p2.getX()) < TOLERANCE
-                && (p1.getY() - p2.getY()) < TOLERANCE
-                && (p1.getZ() - p2.getZ()) < TOLERANCE;
-    }
 
     /**
      * Test method for {@link Sphere#findIntersections(Ray)}.
@@ -86,8 +73,8 @@ class SphereTest {
                     .sorted(Comparator.comparingDouble(p -> p.distance(p01)))
                     .toList();
             assertEquals(1, result2.size(), "Wrong number of points-expected to 1");
-            assertTrue(compareWithTolerance(new Point(0.5 - 0.41143782777,0, 0.41143782777),
-                        result2.getFirst()),
+            assertEquals(new Point(0.08856217223385238,0.0,0.4114378277661476),
+                        result2.getFirst(),
                         "Ray crosses sphere");
         }
         else
@@ -218,8 +205,8 @@ class SphereTest {
         if(result8 != null){
             result8 = result8.stream().sorted(Comparator.comparingDouble(p -> p.distance(p01))).toList();
             assertEquals(1, result8.size(), "Wrong number of points-expected to 1");
-            assertTrue(compareWithTolerance(new Point(0.5, 0.86602540378, 0),
-                        result8.getFirst()),
+            assertEquals(new Point(0.5,0.8660254037844386,0.0),
+                        result8.getFirst(),
                         "Ray crosses sphere");
         }
         else
