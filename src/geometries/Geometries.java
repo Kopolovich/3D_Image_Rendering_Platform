@@ -35,7 +35,7 @@ public class Geometries implements Intersectable {
      *
      * @param geometries the geometries to add
      */
-    private void add(Intersectable... geometries) {
+    public void add(Intersectable... geometries) {
         Collections.addAll(this.geometries, geometries);
     }
 

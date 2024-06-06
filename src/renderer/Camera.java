@@ -1,5 +1,6 @@
 package renderer;
 
+import primitives.Color;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
@@ -103,6 +104,23 @@ public class Camera implements Cloneable {
             return this;
         }
 
+        public Builder setImageWriter(ImageWriter imageWriter){
+            if (imageWriter == null)
+                throw new IllegalArgumentException("imageWriter can not be null");
+
+            camera.imageWriter = imageWriter;
+            return this;
+        }
+
+        public Builder setRayTracer(RayTracerBase rayTracer){
+            if (rayTracer == null)
+                throw new IllegalArgumentException("rayTracer can not be null");
+
+            camera.rayTracer = rayTracer;
+            return this;
+        }
+
+
         /**
          * Builds and returns a Camera object with the specified parameters.
          *
@@ -124,6 +142,10 @@ public class Camera implements Cloneable {
                 throw new MissingResourceException(GENERAL_DESCRIPTION, "Camera", "width is missing");
             if (camera.distance == 0.0)
                 throw new MissingResourceException(GENERAL_DESCRIPTION, "Camera", "distance is missing");
+            if (camera.imageWriter == null)
+                throw new MissingResourceException(GENERAL_DESCRIPTION, "Camera", "imageWriter is missing");
+            if (camera.rayTracer == null)
+                throw new MissingResourceException(GENERAL_DESCRIPTION, "Camera", "rayTracer is missing");
 
             camera.vRight = camera.vTo.crossProduct(camera.vUp).normalize();
             return camera.clone();
@@ -137,6 +159,8 @@ public class Camera implements Cloneable {
     private double height = 0.0;
     private double width = 0.0;
     private double distance = 0.0;
+    private ImageWriter imageWriter;
+    private RayTracerBase rayTracer;
 
     private Camera() {
     }
@@ -164,6 +188,57 @@ public class Camera implements Cloneable {
         Vector vij = pij.subtract(p0);
         return new Ray(p0, vij.normalize());
     }
+
+    /**
+     * Renders the image by casting rays through all pixels in the view plane.
+     */
+    public void renderImage() {
+        int nx = imageWriter.getNx();
+        int ny = imageWriter.getNy();
+        for (int i = 0; i < ny; i++) {
+            for (int j = 0; j < nx; j++) {
+                castRay(nx, ny, j, i);
+            }
+        }
+    }
+
+    /**
+     * Casts a ray for each pixel in the view plane and writes the corresponding color to the image.
+     *
+     * @param Nx     The number of pixels in the view plane's width.
+     * @param Ny     The number of pixels in the view plane's height.
+     * @param column The column index of the pixel in the view plane.
+     * @param row    The row index of the pixel in the view plane.
+     */
+    private void castRay(int Nx, int Ny, int column, int row) {
+        Ray ray = constructRay(Nx, Ny, column, row);
+        Color color = rayTracer.traceRay(ray);
+        imageWriter.writePixel(column, row, color);
+    }
+
+    /**
+     * Prints a grid of pixels on the image with the specified interval and color.
+     *
+     * @param interval The interval between grid lines.
+     * @param color    The color of the grid lines.
+     */
+    public void printGrid(int interval, Color color) {
+        for (int i = 0; i < imageWriter.getNx(); i++) {
+            for (int j = 0; j < imageWriter.getNy(); j++) {
+                if (i % interval == 0 || j % interval == 0) {
+                    imageWriter.writePixel(i, j, color);
+                }
+            }
+        }
+    }
+
+    /**
+     * Writes the pixel data to the image.
+     */
+    public void writeToImage() {
+        imageWriter.writeToImage();
+    }
+
 
     /**
      * Returns a new Builder instance for creating Camera objects.

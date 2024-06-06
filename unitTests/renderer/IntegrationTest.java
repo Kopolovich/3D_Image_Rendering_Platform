@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+import scene.Scene;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
@@ -42,6 +44,8 @@ public class IntegrationTest {
 
     // Define cameras for testing
     Camera camera1 = Camera.getBuilder()
+            .setRayTracer(new SimpleRayTracer(new Scene("Test")))
+            .setImageWriter(new ImageWriter("Test", 1, 1))
             .setLocation(new Point(0, 0, 0))
             .setDirection(new Vector(0, 0, -1), new Vector(0, 1, 0))
             .setVpSize(3, 3)
@@ -49,6 +53,8 @@ public class IntegrationTest {
             .build();
 
     Camera camera2 = Camera.getBuilder()
+            .setRayTracer(new SimpleRayTracer(new Scene("Test")))
+            .setImageWriter(new ImageWriter("Test", 1, 1))
             .setLocation(new Point(0, 0, 0.5))
             .setDirection(new Vector(0, 0, -1), new Vector(0, 1, 0))
             .setVpSize(3, 3)
