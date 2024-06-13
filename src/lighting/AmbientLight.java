@@ -7,9 +7,7 @@ import primitives.Double3;
  * AmbientLight represents ambient lighting in a scene.
  * It provides functionality to calculate the intensity of ambient light.
  */
-public class AmbientLight {
-    /** The intensity of the ambient light. */
-    private final Color intensity;
+public class AmbientLight extends Light {
 
     /** Represents no ambient light. */
     public static final AmbientLight NONE = new AmbientLight(Color.BLACK, 0);
@@ -21,7 +19,7 @@ public class AmbientLight {
      * @param KA The coefficient of the ambient light.
      */
     public AmbientLight(Color IA, Double3 KA) {
-        intensity = IA.scale(KA);
+        super(IA.scale(KA));
     }
 
     /**
@@ -31,16 +29,8 @@ public class AmbientLight {
      * @param KA The coefficient of the ambient light.
      */
     public AmbientLight(Color IA, double KA) {
-        intensity = IA.scale(KA);
+        super(IA.scale(KA));
     }
 
-    /**
-     * Gets the intensity of the ambient light.
-     *
-     * @return The intensity of the ambient light.
-     */
-    public Color getIntensity() {
-        return intensity;
-    }
 }
 

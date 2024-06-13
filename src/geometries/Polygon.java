@@ -14,7 +14,7 @@ import primitives.Vector;
  * system
  * @author Dan
  */
-public class Polygon implements Geometry {
+public class Polygon extends Geometry {
    /** List of polygon's vertices */
    protected final List<Point> vertices;
    /** Associated plane in which the polygon lays */
@@ -91,16 +91,13 @@ public class Polygon implements Geometry {
    public Vector getNormal(Point point) { return plane.getNormal(); }
 
    /**
-    * Returns a list of intersection points between the given ray and the polygon.
-    * If the ray does not intersect the polygon, or if the intersection point is on an edge or vertex,
-    * the method returns null.
+    * Finds the intersections of the given ray with the current polygon.
     *
-    * @param ray The ray to find intersections with the polygon
-    * @return A list containing the intersection point if the ray intersects the interior of the polygon,
-    *         or null otherwise
+    * @param ray The ray to intersect with the polygon.
+    * @return A list containing a single {@link GeoPoint} representing the intersection point, or null if there is no intersection.
     */
    @Override
-   public List<Point> findIntersections(Ray ray) {
+   protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
       // Find the intersection with the plane
       List<Point> planeIntersections = plane.findIntersections(ray);
       if (planeIntersections == null) {
@@ -176,6 +173,6 @@ public class Polygon implements Geometry {
             return null;
          }
       }
-      return List.of(intersectionPoint);
+      return List.of(new GeoPoint(this, intersectionPoint));
    }
 }

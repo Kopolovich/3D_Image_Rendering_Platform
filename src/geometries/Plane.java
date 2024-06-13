@@ -11,7 +11,7 @@ import static primitives.Util.isZero;
 /**
  * Represents a plane in three-dimensional space.
  */
-public class Plane implements Geometry {
+public class Plane extends Geometry {
 
     private final Point q; // A point on the plane
     private final Vector normal; // The normal vector to the plane
@@ -98,5 +98,43 @@ public class Plane implements Geometry {
 
         // Return the intersection point as a list
         return List.of(intersectionPoint);
+    }
+
+    /**
+     * Finds the intersections of the given ray with the current geometry.
+     *
+     * @param ray The ray to intersect with the geometry.
+     * @return A list containing a single {@link GeoPoint} representing the intersection point, or null if there is no intersection.
+     */
+    @Override
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+        Point p0 = ray.getHead();  // The origin point of the ray
+        Vector v = ray.getDirection();  // The direction vector of the ray
+
+        if(q.equals(p0))  // If the ray's origin lies exactly on the plane and the ray is parallel to the plane
+            return null;
+
+        Vector q0MinusP0 = q.subtract(p0);  // Vector from p0 to q
+
+        double nv = normal.dotProduct(v);  // Dot product of the normal and the ray direction
+
+        // If the ray is parallel to the plane (dot product is zero), return null
+        if (isZero(nv)) {
+            return null;
+        }
+
+        double nQMinusP0 = normal.dotProduct(q0MinusP0);  // Dot product of the normal and q0MinusP0
+        double t = alignZero(nQMinusP0 / nv);  // Calculate t
+
+        // If t <= 0, the intersection point is behind the ray's origin or on the ray's origin, return null
+        if (t <= 0) {
+            return null;
+        }
+
+        // Calculate the intersection point
+        GeoPoint intersection = new GeoPoint(this, ray.getPoint(t)) ;
+
+        // Return the intersection GeoPoint as a list
+        return List.of(intersection);
     }
 }

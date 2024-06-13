@@ -36,19 +36,19 @@ public class Sphere extends RadialGeometry {
     }
 
     /**
-     * Finds the intersections of the given ray with the sphere.
+     * Finds the intersections of the given ray with the current sphere.
      *
-     * @param ray the ray to check for intersections with the sphere
-     * @return a list of intersection points, or {@code null} if there are no intersections
+     * @param ray The ray to intersect with the sphere.
+     * @return A list of {@link GeoPoint} objects representing the intersection points, or null if there are no intersections.
      */
     @Override
-    public List<Point> findIntersections(Ray ray) {
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
         Point p0 = ray.getHead();  // The starting point of the ray
         Vector v = ray.getDirection();  // The direction vector of the ray
 
         // Deals with case where ray starts from the center of the sphere
         if (p0.equals(center))
-            return List.of(ray.getPoint(radius));
+            return List.of(new GeoPoint(this, ray.getPoint(radius)));
 
         Vector u = center.subtract(p0);  // Vector from ray start point to sphere center
         double tm = v.dotProduct(u);  // Projection of u onto v
@@ -63,13 +63,13 @@ public class Sphere extends RadialGeometry {
         if (alignZero(t1) > 0 && alignZero(t2) > 0) {  // Both intersections are in front of the ray start
             Point p1 = ray.getPoint(t1);  // First intersection point
             Point p2 = ray.getPoint(t2);  // Second intersection point
-            return List.of(p1, p2);
+            return List.of(new GeoPoint(this, p1), new GeoPoint(this, p2));
         } else if (alignZero(t1) > 0) {  // Only the first intersection is in front of the ray start
             Point p1 = ray.getPoint(t1);  // First intersection point
-            return List.of(p1);
+            return List.of(new GeoPoint(this, p1));
         } else if (alignZero(t2) > 0) {  // Only the second intersection is in front of the ray start
             Point p2 = ray.getPoint(t2);  // Second intersection point
-            return List.of(p2);
+            return List.of(new GeoPoint(this, p2));
         }
 
         return null;  // No intersections in front of the ray start

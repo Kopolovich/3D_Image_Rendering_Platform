@@ -20,20 +20,17 @@ public class Triangle extends Polygon {
     }
 
     /**
-     * Returns a list of intersection points between the given ray and the triangle.
-     * If the ray does not intersect the triangle, or if the intersection point is on an edge or vertex,
-     * the method returns null.
+     * Finds the intersections of the given ray with the current triangle.
      *
-     * @param ray The ray to find intersections with the triangle
-     * @return A list containing the intersection point if the ray intersects the interior of the triangle,
-     *         or null otherwise
+     * @param ray The ray to intersect with the triangle.
+     * @return A list of {@link GeoPoint} objects representing the intersection points, or null if there are no intersections.
      */
     @Override
-    public List<Point> findIntersections(Ray ray) {
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
         List<Point> intersectionPoints = plane.findIntersections(ray);
         if (intersectionPoints == null)
             return null;
-        Point intersectionPoint = intersectionPoints.get(0);
+        Point intersectionPoint = intersectionPoints.getFirst();
 
         // Calculate vectors from ray's head to each vertex of the triangle
         Vector v1 = vertices.get(0).subtract(ray.getHead());
@@ -56,9 +53,8 @@ public class Triangle extends Polygon {
 
         // Check if the ray intersects the triangle by verifying all dot products are either all positive or all negative
         if ((vn1 > 0.0 && vn2 > 0.0 && vn3 > 0.0) || (vn1 < 0.0 && vn2 < 0.0 && vn3 < 0.0))
-            return List.of(intersectionPoint);
+            return List.of(new GeoPoint(this, intersectionPoint));
 
         return null;
     }
-
 }

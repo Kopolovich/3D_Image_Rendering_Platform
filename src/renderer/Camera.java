@@ -194,7 +194,7 @@ public class Camera implements Cloneable {
     /**
      * Renders the image by casting rays through all pixels in the view plane.
      */
-    public void renderImage() {
+    public Camera renderImage() {
         int nx = imageWriter.getNx();
         int ny = imageWriter.getNy();
         for (int i = 0; i < ny; i++) {
@@ -202,6 +202,7 @@ public class Camera implements Cloneable {
                 castRay(nx, ny, j, i);
             }
         }
+        return this;
     }
 
     /**
