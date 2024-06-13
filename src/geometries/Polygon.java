@@ -101,9 +101,6 @@ public class Polygon implements Geometry {
     */
    @Override
    public List<Point> findIntersections(Ray ray) {
-      Point p0 = ray.getHead();  // The origin point of the ray
-      Vector v = ray.getDirection();  // The direction vector of the ray
-
       // Find the intersection with the plane
       List<Point> planeIntersections = plane.findIntersections(ray);
       if (planeIntersections == null) {

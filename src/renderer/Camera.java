@@ -8,6 +8,8 @@ import primitives.Vector;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
+import static primitives.Util.isZero;
+
 /**
  * Represents a camera in a 3D scene.
  * Provides functionality to construct rays through the camera's view plane.
@@ -181,9 +183,9 @@ public class Camera implements Cloneable {
         double yi = -(i - (nY - 1) / 2.0) * rY;
         double xj = (j - (nX - 1) / 2.0) * rX;
         Point pij = pc;
-        if (xj != 0)
+        if (!isZero(xj))
             pij = pij.add(vRight.scale(xj));
-        if (yi != 0)
+        if (!isZero(yi))
             pij = pij.add(vUp.scale(yi));
         Vector vij = pij.subtract(p0);
         return new Ray(p0, vij.normalize());
@@ -223,14 +225,23 @@ public class Camera implements Cloneable {
      * @param color    The color of the grid lines.
      */
     public void printGrid(int interval, Color color) {
-        for (int i = 0; i < imageWriter.getNx(); i++) {
+        // Iterate over the x-axis at the specified interval
+        for (int i = 0; i < imageWriter.getNx(); i += interval) {
+            // Draw vertical grid lines
             for (int j = 0; j < imageWriter.getNy(); j++) {
-                if (i % interval == 0 || j % interval == 0) {
-                    imageWriter.writePixel(i, j, color);
-                }
+                imageWriter.writePixel(i, j, color);
+            }
+        }
+
+        // Iterate over the y-axis at the specified interval
+        for (int j = 0; j < imageWriter.getNy(); j += interval) {
+            // Draw horizontal grid lines
+            for (int i = 0; i < imageWriter.getNx(); i++) {
+                imageWriter.writePixel(i, j, color);
             }
         }
     }
+
 
     /**
      * Writes the pixel data to the image.

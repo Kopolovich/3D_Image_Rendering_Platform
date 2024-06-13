@@ -20,26 +20,26 @@ public class IntegrationTest {
     /**
      * Helper method to assert the number of intersections between camera rays and geometrical objects.
      *
-     * @param camera              The camera used for generating rays.
-     * @param geometricalObject   The geometrical object to intersect with.
-     * @param expectedIntersections The expected number of intersections.
+     * @param expected The expected number of intersections.
+     * @param camera The camera used for generating rays.
+     * @param geometry The geometrical object to intersect with.
+     * @param nX The number of pixels in the view plane's width.
+     * @param nY The number of pixels in the view plane's height.
      */
-    private void assertIntersections(Camera camera, Intersectable geometricalObject, int expectedIntersections) {
-        int nX = 3;
-        int nY = 3;
+    private void assertIntersections(int expected, Camera camera, Intersectable geometry, int nX, int nY) {
         int intersections = 0;
 
         for (int i = 0; i < nY; i++) {
             for (int j = 0; j < nX; j++) {
                 Ray ray = camera.constructRay(nX, nY, j, i);
-                var intersectionsList = geometricalObject.findIntersections(ray);
+                var intersectionsList = geometry.findIntersections(ray);
                 if (intersectionsList != null) {
                     intersections += intersectionsList.size();
                 }
             }
         }
 
-        assertEquals(expectedIntersections, intersections, "Wrong amount of intersections");
+        assertEquals(expected, intersections, "Wrong amount of intersections");
     }
 
     // Define cameras for testing
@@ -69,23 +69,23 @@ public class IntegrationTest {
 
         // TC01: Sphere with 2 intersections
         Sphere sphere1 = new Sphere(1, new Point(0, 0, -3));
-        assertIntersections(camera1, sphere1, 2);
+        assertIntersections(2, camera1, sphere1, 3, 3);
 
         // TC02: Sphere with 18 intersections
         Sphere sphere2 = new Sphere(2.5, new Point(0, 0, -2.5));
-        assertIntersections(camera2, sphere2, 18);
+        assertIntersections(18, camera2, sphere2, 3, 3);
 
         // TC03: Sphere with 10 intersections
         Sphere sphere3 = new Sphere(2, new Point(0, 0, -2));
-        assertIntersections(camera2, sphere3, 10);
+        assertIntersections(10, camera2, sphere3, 3, 3);
 
         // TC04: Sphere with no intersections (behind the camera)
         Sphere sphere4 = new Sphere(0.5, new Point(0, 0, 1));
-        assertIntersections(camera1, sphere4, 0);
+        assertIntersections(0, camera1, sphere4, 3, 3);
 
         // TC05: Sphere with 9 intersections
         Sphere sphere5 = new Sphere(4, new Point(0, 0, -1));
-        assertIntersections(camera1, sphere5, 9);
+        assertIntersections(9, camera1, sphere5, 3, 3);
     }
 
     /**
@@ -96,15 +96,15 @@ public class IntegrationTest {
 
         // TC06: Plane with 9 intersections
         Plane plane1 = new Plane(new Point(0, 0, -5), new Vector(0, 0, 1));
-        assertIntersections(camera1, plane1, 9);
+        assertIntersections(9, camera1, plane1, 3, 3);
 
         // TC07: Plane with 9 intersections (different normal vector)
         Plane plane2 = new Plane(new Point(0, 0, -5), new Vector(0, 0.2, -1));
-        assertIntersections(camera1, plane2, 9);
+        assertIntersections(9, camera1, plane2, 3, 3);
 
         // TC08: Plane with 6 intersections (different normal vector)
         Plane plane3 = new Plane(new Point(0, 0, -5), new Vector(0, 1, -1));
-        assertIntersections(camera1, plane3, 6);
+        assertIntersections(6, camera1, plane3, 3, 3);
     }
 
     /**
@@ -117,12 +117,12 @@ public class IntegrationTest {
         Triangle triangle1 = new Triangle(new Point(0, 1, -2),
                 new Point(1, -1, -2),
                 new Point(-1, -1, -2));
-        assertIntersections(camera1, triangle1, 1);
+        assertIntersections(1, camera1, triangle1, 3, 3);
 
         // TC10: Triangle with 2 intersections
         Triangle triangle2 = new Triangle(new Point(0, 20, -2),
                 new Point(1, -1, -2),
                 new Point(-1, -1, -2));
-        assertIntersections(camera1, triangle2, 2);
+        assertIntersections(2, camera1, triangle2, 3, 3);
     }
 }

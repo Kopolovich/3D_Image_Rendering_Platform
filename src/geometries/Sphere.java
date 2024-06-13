@@ -48,7 +48,7 @@ public class Sphere extends RadialGeometry {
 
         // Deals with case where ray starts from the center of the sphere
         if (p0.equals(center))
-            return List.of(ray.getPoint(this.radius));
+            return List.of(ray.getPoint(radius));
 
         Vector u = center.subtract(p0);  // Vector from ray start point to sphere center
         double tm = v.dotProduct(u);  // Projection of u onto v
@@ -61,14 +61,14 @@ public class Sphere extends RadialGeometry {
         double t2 = tm + th;  // Distance to the second intersection point
 
         if (alignZero(t1) > 0 && alignZero(t2) > 0) {  // Both intersections are in front of the ray start
-            Point p1 = p0.add(v.scale(t1));  // First intersection point
-            Point p2 = p0.add(v.scale(t2));  // Second intersection point
+            Point p1 = ray.getPoint(t1);  // First intersection point
+            Point p2 = ray.getPoint(t2);  // Second intersection point
             return List.of(p1, p2);
         } else if (alignZero(t1) > 0) {  // Only the first intersection is in front of the ray start
-            Point p1 = p0.add(v.scale(t1));  // First intersection point
+            Point p1 = ray.getPoint(t1);  // First intersection point
             return List.of(p1);
         } else if (alignZero(t2) > 0) {  // Only the second intersection is in front of the ray start
-            Point p2 = p0.add(v.scale(t2));  // Second intersection point
+            Point p2 = ray.getPoint(t2);  // Second intersection point
             return List.of(p2);
         }
 

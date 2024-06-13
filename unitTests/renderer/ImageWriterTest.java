@@ -3,6 +3,7 @@ package renderer;
 import org.junit.jupiter.api.Test;
 import primitives.Color;
 
+import static java.awt.Color.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -20,21 +21,29 @@ class ImageWriterTest {
         // Create an ImageWriter object with dimensions 800x500
         ImageWriter imageWriter = new ImageWriter("yellow", 800, 500);
 
-        // Iterate over each pixel in the image
+        // Fill the entire image with yellow
+        Color yellow = new Color(YELLOW);
         for (int i = 0; i < imageWriter.getNx(); i++) {
             for (int j = 0; j < imageWriter.getNy(); j++) {
-                // Check if the current pixel is on a 16x10 red grid
-                if (i % 50 == 0 || j % 50 == 0) {  // 800/16 = 50 and 500/10 = 50
-                    // Write a red pixel
-                    imageWriter.writePixel(i, j, new Color(java.awt.Color.RED));
-                } else {
-                    // Write a yellow pixel
-                    imageWriter.writePixel(i, j, new Color(java.awt.Color.YELLOW));
-                }
+                imageWriter.writePixel(i, j, yellow);
+            }
+        }
+
+        // Draw the 16x10 red grid
+        Color red = new Color(RED);
+        for (int i = 0; i < imageWriter.getNx(); i += 50) {
+            for (int j = 0; j < imageWriter.getNy(); j++) {
+                imageWriter.writePixel(i, j, red);
+            }
+        }
+        for (int j = 0; j < imageWriter.getNy(); j += 50) {
+            for (int i = 0; i < imageWriter.getNx(); i++) {
+                imageWriter.writePixel(i, j, red);
             }
         }
 
         // Save the image
         imageWriter.writeToImage();
     }
+
 }
