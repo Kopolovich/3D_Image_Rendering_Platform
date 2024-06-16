@@ -190,7 +190,8 @@ public class LightsTests {
       scene2.geometries.add(triangle1, triangle2);
       scene2.lights.add(new SpotLight(trianglesLightColor, trianglesLightPosition, trianglesLightDirection)
               .setkL(0.001).setkQ(0.0001));
-      scene2.lights.add(new PointLight(new Color(250, 2, 250), new Point(80, 80, 60)).setkL(0.0003).setkQ(0.00003));
+
+      scene2.lights.add(new PointLight(new Color(255, 20, 147), new Point(80, 80, 60)).setkL(0.0003).setkQ(0.00003));
       scene2.lights.add(new DirectionalLight(new Color(150, 10, 20), new Vector(0, -1, -1)));
 
       ImageWriter imageWriter = new ImageWriter("TriangleLights", 500, 500);
@@ -200,6 +201,7 @@ public class LightsTests {
               .renderImage()
               .writeToImage();
    }
+
 
 //   /** Produce a picture of a sphere lighted by a narrow spotlight */
 //   @Test
