@@ -26,22 +26,36 @@ public class SimpleRayTracer extends RayTracerBase {
         super(scene);
     }
 
-    private boolean unshaded(GeoPoint gp, Vector l, Vector n , LightSource light) {
+    private boolean unshaded(GeoPoint gp, Vector l, Vector n, LightSource light) {
         Vector lightDirection = l.scale(-1); // from point to light source
 
+        // Ensure the delta is applied correctly to avoid self-shadowing
         Vector delta = n.scale(n.dotProduct(lightDirection) > 0 ? DELTA : -DELTA);
         Point point = gp.point.add(delta);
 
+        // Create the shadow ray
         Ray lightRay = new Ray(point, lightDirection);
+
+        // Find intersections with the scene geometries
         var intersections = scene.geometries.findGeoIntersections(lightRay);
+
+        // If there are no intersections, return true (no shadow)
         if (intersections == null) return true;
-        double lightDistance = l.length();
+
+        // Calculate the distance to the light source
+        double lightDistance = light.getDistance(gp.point);
+
+        // Check each intersection point
         for (GeoPoint geop : intersections) {
-            if (alignZero(geop.point.distance(gp.point) - lightDistance) <= 0)
+            // If an intersection is found within the distance to the light source, it's in shadow
+            if (alignZero(geop.point.distance(gp.point) - lightDistance) <= 0) {
                 return false;
+            }
         }
+
         return true;
     }
+
     /**
      * Traces a ray through the scene and determines the color at the intersection point.
      *
