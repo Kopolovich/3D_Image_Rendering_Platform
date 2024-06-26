@@ -15,6 +15,7 @@ import static primitives.Util.alignZero;
  * the color of a ray by finding intersections with the 3D model of the scene.
  */
 public class SimpleRayTracer extends RayTracerBase {
+    private static final double DELTA = 0.1;
 
     /**
      * Constructs a SimpleRayTracer with the given scene.
@@ -25,7 +26,22 @@ public class SimpleRayTracer extends RayTracerBase {
         super(scene);
     }
 
+    private boolean unshaded(GeoPoint gp, Vector l, Vector n , LightSource light) {
+        Vector lightDirection = l.scale(-1); // from point to light source
 
+        Vector delta = n.scale(n.dotProduct(lightDirection) > 0 ? DELTA : -DELTA);
+        Point point = gp.point.add(delta);
+
+        Ray lightRay = new Ray(point, lightDirection);
+        var intersections = scene.geometries.findGeoIntersections(lightRay);
+        if (intersections == null) return true;
+        double lightDistance = l.length();
+        for (GeoPoint geop : intersections) {
+            if (alignZero(geop.point.distance(gp.point) - lightDistance) <= 0)
+                return false;
+        }
+        return true;
+    }
     /**
      * Traces a ray through the scene and determines the color at the intersection point.
      *
@@ -78,7 +94,7 @@ public class SimpleRayTracer extends RayTracerBase {
             double nl = alignZero(n.dotProduct(l)); // Dot product between the normal and light direction vectors
 
             // Check if the light is on the same side as the view direction
-            if (nl * nv > 0) {
+            if (nl * nv > 0 && unshaded(gp, l, n,lightSource)) {
                 Color iL = lightSource.getIntensity(gp.point); // Intensity of the light source at the intersection point
 
                 // Calculate the contributions of diffuse and specular reflections
