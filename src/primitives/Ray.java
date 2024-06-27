@@ -11,6 +11,7 @@ import geometries.Intersectable.GeoPoint;
 import static primitives.Util.isZero;
 
 public class Ray {
+    private static final double DELTA = 0.1;
     /**
      * The starting point of the ray.
      */
@@ -30,6 +31,17 @@ public class Ray {
     public Ray(Point head, Vector direction) {
         this.head = head;
         this.direction = direction.normalize();
+    }
+
+    public Ray(Point head, Vector direction, Vector normal)//con and move in a given direction
+    {
+        this.direction = direction.normalize();
+        if (isZero(direction.dotProduct(normal))) {
+            this.head = head;
+        } else if (direction.dotProduct(normal) > 0)
+            this.head = head.add(normal.scale(DELTA));
+        else
+            this.head = head.add(normal.scale(-DELTA));
     }
 
     public Point getHead() {
