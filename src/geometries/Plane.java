@@ -84,7 +84,7 @@ public class Plane extends Geometry {
         if (isZero(nv)) {
             return null;
         }
-
+        
         double nQMinusP0 = normal.dotProduct(q0MinusP0);  // Dot product of the normal and q0MinusP0
         double t = alignZero(nQMinusP0 / nv);  // Calculate t
 
