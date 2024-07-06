@@ -1,5 +1,7 @@
 package primitives;
 
+import static primitives.Util.isZero;
+
 /**
  * This class represents a vector in a three-dimensional space.
  * It extends the Point class and provides vector-specific operations.
@@ -120,5 +122,12 @@ public class Vector extends Point {
     public Vector normalize() {
         double length = this.length();
         return new Vector(this.xyz.reduce(length));
+    }
+
+    public Vector createNormal(){
+        if(isZero(xyz.d1))
+            return new Vector(1,0,0);
+        else
+            return new Vector(xyz.d2, -xyz.d1, 0).normalize();
     }
 }
