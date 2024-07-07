@@ -143,12 +143,12 @@ public class SimpleRayTracer extends RayTracerBase {
      * @param kx    the attenuation factor for the current material
      * @return the color after considering global effects
      */
-//    private Color calcGlobalEffect(Ray ray, int level, Double3 k, Double3 kx) {
-//        Double3 kkx = k.product(kx);
-//        if (kkx.lowerThan(MIN_CALC_COLOR_K)) return Color.BLACK;
-//        GeoPoint gp = findClosestIntersection(ray);
-//        return (gp == null ? scene.background : calcColor(gp, ray, level - 1, kkx)).scale(kx);
-//    }
+    private Color calcGlobalEffect(Ray ray, int level, Double3 k, Double3 kx) {
+        Double3 kkx = k.product(kx);
+        if (kkx.lowerThan(MIN_CALC_COLOR_K)) return Color.BLACK;
+        GeoPoint gp = findClosestIntersection(ray);
+        return (gp == null ? scene.background : calcColor(gp, ray, level - 1, kkx)).scale(kx);
+    }
 
     /*
      * Recursively calculates the global effects of reflection and refraction on the color.
@@ -159,16 +159,16 @@ public class SimpleRayTracer extends RayTracerBase {
      * @param kx    the attenuation factor for the current material
      * @return the color after considering global effects
      */
-    private Color calcGlobalEffect(Ray ray, int level, Double3 k, Double3 kx) {
-        Double3 kkx = k.product(kx);
-        if (kkx.lowerThan(MIN_CALC_COLOR_K)) return Color.BLACK;
-        GeoPoint gp = findClosestIntersection(ray);
-        if(gp == null)
-            return scene.background;
-        Vector n = gp.geometry.getNormal(gp.point);
-        var rays = Blackboard.generateBeam(n, 1, 1, ray, IS_ANTI_ALIASING ? 10 : 1);
-        return calcAverageColor(rays, level, kx, kkx);
-    }
+//    private Color calcGlobalEffect(Ray ray, int level, Double3 k, Double3 kx) {
+//        Double3 kkx = k.product(kx);
+//        if (kkx.lowerThan(MIN_CALC_COLOR_K)) return Color.BLACK;
+//        GeoPoint gp = findClosestIntersection(ray);
+//        if(gp == null)
+//            return scene.background;
+//        Vector n = gp.geometry.getNormal(gp.point);
+//        var rays = Blackboard.generateBeam(n, 1, 1, ray, IS_ANTI_ALIASING ? 10 : 1);
+//        return calcAverageColor(rays, level, kx, kkx);
+//    }
 
     /**
      * Calculates the local effects of light on the color at a given intersection point.
@@ -249,41 +249,6 @@ public class SimpleRayTracer extends RayTracerBase {
     }
 
     /**
-     * Determines if a point is unshaded by checking for intersections between the point and the light source.
-     *
-     * @param gp    the intersection point
-     * @param l     the light direction vector
-     * @param n     the normal vector at the intersection point
-     * @param light the light source
-     * @return true if the point is unshaded, false otherwise
-     */
-    private boolean unshaded(GeoPoint gp, Vector l, Vector n, LightSource light) {
-        Vector lightDirection = l.scale(-1); // from point to light source
-
-        Vector delta = n.scale(n.dotProduct(lightDirection) > 0 ? DELTA : -DELTA); // Apply delta to avoid self-shadowing
-        Point point = gp.point.add(delta);
-
-        Ray lightRay = new Ray(point, lightDirection); // Create the shadow ray
-
-        var intersections = scene.geometries.findGeoIntersections(lightRay); // Find intersections with the scene geometries
-
-        if (intersections == null) return true; // If there are no intersections, return true (no shadow)
-
-        double lightDistance = light.getDistance(gp.point); // Calculate the distance to the light source
-
-        for (GeoPoint geop : intersections) {
-            if (alignZero(geop.point.distance(gp.point) - lightDistance) <= 0) {
-                Material material = geop.geometry.getMaterial();
-                if (material.kT.equals(Double3.ZERO)) {
-                    return false; // If an intersection is found within the distance to the light source and the material is opaque, it's in shadow
-                }
-            }
-        }
-
-        return true;
-    }
-
-    /**
      * Calculates the transparency factor for a point by checking intersections between the point and the light source.
      *
      * @param gp    the intersection point
@@ -295,14 +260,18 @@ public class SimpleRayTracer extends RayTracerBase {
     private Double3 transparency(GeoPoint gp, LightSource light, Vector l, Vector n) {
         Vector lightDirection = l.scale(-1); // from point to light source
         Ray lightRay = new Ray(gp.point, lightDirection, n);
-        Point point = lightRay.getHead();
         List<GeoPoint> intersections = scene.geometries.findGeoIntersections(lightRay);
         if (intersections == null) return Double3.ONE;
         Double3 ktr = Double3.ONE;
+
         for (GeoPoint element : intersections) {
-            if (light.getDistance(point) > point.distance(element.point))
-                ktr = ktr.product(element.geometry.getMaterial().kT);
-        }/**/
+            if (alignZero(element.point.distance(gp.point)) - light.getDistance(gp.point) <=0) {
+                Material material = element.geometry.getMaterial();
+                ktr = ktr.product(material.kT);
+                if (ktr.equals(Double3.ZERO))
+                    break;
+            }
+        }
         return ktr;
     }
 

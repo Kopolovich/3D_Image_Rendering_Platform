@@ -33,6 +33,14 @@ public class Ray {
         this.direction = direction.normalize();
     }
 
+    /**
+     * Constructs a new ray with the given starting point, direction vector, and normal vector.
+     * The head of the ray is adjusted slightly in the direction of the normal vector to avoid self-intersections.
+     *
+     * @param head      The starting point of the ray.
+     * @param direction The direction vector of the ray.
+     * @param normal    The normal vector of the geometry that the ray is intersecting.
+     */
     public Ray(Point head, Vector direction, Vector normal)//con and move in a given direction
     {
         this.direction = direction.normalize();
