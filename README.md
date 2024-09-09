@@ -1,6 +1,6 @@
 **3D Image Rendering Platform**
-Overview
-This Java-based platform was developed as part of an Introduction to Software Engineering project (May 2024 – July 2024). It enables users to generate 3D images through vector manipulation, color processing, and simulating realistic lighting effects. The project demonstrates fundamental principles of 3D rendering such as camera integration, lighting effects, and reflections.
+
+This Java-based platform was developed as part of an Introduction to Software Engineering course at Jerusalem College of Technology (May 2024 – July 2024). It enables users to generate 3D images through vector manipulation, color processing, and simulating realistic lighting effects. The project demonstrates fundamental principles of 3D rendering such as camera integration, lighting effects, and reflections.
 
 **Features:**
 3D Image Generation: Create dynamic 3D scenes with custom objects using vector-based geometry.
