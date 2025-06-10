@@ -1,16 +1,31 @@
-**3D Image Rendering Platform**
+# 3D Image Rendering Platform
 
-This Java-based platform was developed as part of an Introduction to Software Engineering course at Jerusalem College of Technology (May 2024 – July 2024). It enables users to generate 3D images through vector manipulation, color processing, and simulating realistic lighting effects. The project demonstrates fundamental principles of 3D rendering such as camera integration, lighting effects, and reflections.
+This Java-based platform was developed as part of an Introduction to Software Engineering course at the *Jerusalem College of Technology* (May 2024 – July 2024). It enables users to generate 3D images by modeling scenes with geometric primitives, simulating lighting, and applying color and reflection effects.
 
-**Features:**
-3D Image Generation: Create dynamic 3D scenes with custom objects using vector-based geometry.
-Camera Integration: Simulates various camera angles and perspectives for realistic scene viewing.
-Lighting Effects: Supports multiple light sources and simulates shadows, brightness, and reflections.
-Color Processing: Enables color customization for objects and lighting to achieve visually appealing scenes.
-Reflections & Transparency: Adds realism through object reflections and transparent surfaces.
+## Features
 
-**Technologies:**
-Java: Core language for development.
-Vector Manipulation: For defining object coordinates and scene geometry.
-Color Processing: For managing color attributes and applying lighting effects.
-Object-Oriented Design: Ensures scalability and maintainability of the platform.
+- *3D Scene Rendering*  
+  Create complex 3D scenes with custom objects using vector-based geometry.
+
+- *Camera Simulation*  
+  Configure various camera positions and angles to render scenes from multiple perspectives.
+
+- *Lighting System*  
+  Supports multiple light sources, including directional, point, and spot lights with realistic shading and shadow simulation.
+
+- *Color and Material Control*  
+  Customize object colors, light intensity, and surface materials for accurate visual representation.
+
+- *Reflections & Transparency*  
+  Simulate reflective surfaces and transparent materials to enhance scene realism.
+
+## Technologies Used
+
+- *Java* – Core programming language used throughout the project  
+- *Vector Mathematics* – For object positioning, scene layout, and direction calculations  
+- *Object-Oriented Design* – Ensures modularity, scalability, and maintainability  
+- *Color Processing* – For accurate representation of surface and lighting effects
+
+## Authors
+
+Developed by Esti Rosen and Noa Kopolovich during the Summer 2024 semester.
